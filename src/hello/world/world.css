@@ -1,0 +1,5 @@
+:host {
+  display: inline-block;
+  padding: 1rem;
+  border: 0.125rem dashed var(--demo-color);
+}

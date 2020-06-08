@@ -4,7 +4,7 @@ An example repo for `@mdi/element`.
 
 ```bash
 npm install
-npm run start
+npm start
 ```
 
 Goals: Create an app using TypeScript and Web Components.
@@ -17,7 +17,7 @@ Goals: Create an app using TypeScript and Web Components.
 This project uses JEST. All tests files follow the `*.spec.ts` pattern.
 
 ```bash
-npm run test
+npm test
 ```
 
 ## Building
