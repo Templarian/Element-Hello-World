@@ -7,6 +7,8 @@ import serve from 'rollup-plugin-serve'
 import * as fs from 'fs';
 import * as path from 'path';
 
+// This will generate individual JS files
+const DIST_COMPONENTS = false;
 const BROWSER = 'iife';
 const CONFIG = {
   typescript: require('typescript'),
@@ -17,6 +19,9 @@ const CONFIG = {
   }
 };
 
+// Append to the inputs any outside your project
+// ['./node_modules/foo/src/foo/bar.ts']
+const inputs = [];
 const entries = [];
 
 const srcDir = path.join(__dirname, 'src');
@@ -31,38 +36,40 @@ namespaces.forEach((namespace) => {
     const file = path.join(componentDir, `${component}.ts`);
     if (fs.existsSync(file)) {
       const name = `${namespace}${component[0].toUpperCase()}${component.substr(1)}`;
-      entries.push({
-        plugins: [
-          resolve(),
-          typescript(CONFIG),
-          string({
-            include: '**/*.html'
-          }),
-          string({
-            include: '**/*.css'
-          })
-        ],
-        input: `./src/${namespace}/${component}/${component}.ts`,
-        output: {
-          name: `${name}`,
-          file: `./dist/${name}.js`,
-          format: BROWSER,
-          sourcemap: true
-        }
-      });
+      const input = `./src/${namespace}/${component}/${component}.ts`;
+      inputs.push(input);
+      if (DIST_COMPONENTS) {
+        entries.push({
+          plugins: [
+            resolve(),
+            typescript(CONFIG),
+            string({
+              include: '**/*.html'
+            }),
+            string({
+              include: '**/*.css'
+            })
+          ],
+          input,
+          output: {
+            name: `${name}`,
+            file: `./dist/${name}.js`,
+            format: BROWSER,
+            sourcemap: true
+          }
+        });
+      }
     } else {
       console.error(`Unable to find ${file}!`);
     }
   });
 });
 
-
 export default [
   ...entries,
   {
-    input: entries.map(e => e.input),
+    input: inputs,
     output: {
-      // dir: 'dist'
       file: './dist/main.js'
     },
     plugins: [
