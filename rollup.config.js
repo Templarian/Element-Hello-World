@@ -10,7 +10,8 @@ import * as path from 'path';
 // This will generate individual JS files
 const DIST_COMPONENTS = false;
 const BROWSER = 'iife';
-const CONFIG = {
+const PROD = !process.env.ROLLUP_WATCH;
+const TSCONFIG = {
   typescript: require('typescript'),
   tsconfigOverride: {
     compilerOptions: {
@@ -42,7 +43,7 @@ namespaces.forEach((namespace) => {
         entries.push({
           plugins: [
             resolve(),
-            typescript(CONFIG),
+            typescript(TSCONFIG),
             string({
               include: '**/*.html'
             }),
@@ -65,6 +66,32 @@ namespaces.forEach((namespace) => {
   });
 });
 
+const plugins = [
+  resolve(),
+  typescript(TSCONFIG),
+  string({
+    include: '**/*.html'
+  }),
+  string({
+    include: '**/*.css'
+  }),
+  multi(),
+  copy({
+    targets: [
+      { src: 'src/*.html', dest: 'dist' }
+    ]
+  })
+];
+if (!PROD) {
+  plugins.push(
+    serve({
+      open: true,
+      contentBase: 'dist',
+      port: 3000
+    })
+  );
+};
+
 export default [
   ...entries,
   {
@@ -72,26 +99,6 @@ export default [
     output: {
       file: './dist/main.js'
     },
-    plugins: [
-      resolve(),
-      typescript(CONFIG),
-      string({
-        include: '**/*.html'
-      }),
-      string({
-        include: '**/*.css'
-      }),
-      multi(),
-      copy({
-        targets: [
-          { src: 'src/index.html', dest: 'dist' }
-        ]
-      }),
-      serve({
-        open: true,
-        contentBase: 'dist',
-        port: 3000
-      })
-    ]
+    plugins
   }
 ];
