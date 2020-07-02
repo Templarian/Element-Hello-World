@@ -1,4 +1,4 @@
-import { Component } from '@mdi/element';
+import { Component, Part } from '@mdi/element';
 
 import template from './app.html';
 import style from './app.css';
@@ -9,7 +9,13 @@ import style from './app.css';
   template
 })
 export default class HelloApp extends HTMLElement {
-  render() {
+  @Part() $title: HTMLSpanElement;
+
+  connectedCallback() {
+    this.$title.innerText = 'Sample App';
+  }
+
+  render(changes) {
 
   }
 }

@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Templarian/Element-Hello-World#readme",
   "dependencies": {
-    "@mdi/element": "0.0.8",
+    "@mdi/element": "0.0.9",
     "@rollup/plugin-multi-entry": "^3.0.1",
     "@rollup/plugin-node-resolve": "^7.1.3",
     "@rollup/plugin-typescript": "^4.1.1",

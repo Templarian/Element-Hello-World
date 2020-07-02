@@ -1,15 +1,9 @@
+import { selectComponent } from '@mdi/element';
+
 import './world';
 import HelloWorld from './world';
 
 const HELLO_WORLD = 'hello-world';
-
-function selectComponent<T>(tag: string): T {
-  return document.querySelector(tag) as any;
-}
-
-function selectPart<T>(component, name: string): T {
-  return component!.shadowRoot!.querySelector(`[part=${name}]`) as any;
-}
 
 describe('hello-world', () => {
 
@@ -38,17 +32,18 @@ describe('hello-world', () => {
   });
 
   it('should default message', () => {
-    var component = selectComponent<HelloWorld>(HELLO_WORLD);
-    var $message = selectPart<HTMLSpanElement>(component, 'message');
-    expect($message!.innerText).toBe(DEFAULT_MESSAGE);
+    const component = selectComponent<HelloWorld>(HELLO_WORLD);
+    const { $message } = component;
+    expect($message.innerText).toBe(DEFAULT_MESSAGE);
   });
 
   it('should set message to "Hello World!"', async () => {
-    var message = 'Hello World!';
-    var component = selectComponent<HelloWorld>(HELLO_WORLD);
+    const component = selectComponent<HelloWorld>(HELLO_WORLD);
+    const { $message } = component;
+
+    const message = 'Hello World!';
     component.message = message;
-    var $message = selectPart<HTMLSpanElement>(component, 'message');
-    expect($message!.innerText).toBe(message);
+    expect($message.innerText).toBe(message);
   });
 
 });

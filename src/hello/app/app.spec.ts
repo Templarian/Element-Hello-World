@@ -1,15 +1,9 @@
+import { selectComponent } from '@mdi/element';
+
 import './app';
 import HelloApp from './app';
 
 const HELLO_APP = 'hello-app';
-
-function selectComponent<T>(tag: string): T {
-  return document.querySelector(tag) as any;
-}
-
-function selectPart<T>(component, name: string): T {
-  return component!.shadowRoot!.querySelector(`[part=${name}]`) as any;
-}
 
 describe('hello-app', () => {
 
@@ -33,6 +27,12 @@ describe('hello-app', () => {
     const props = Object.keys(symbols);
     expect(props.length).toBe(0);
     // Ex: expect(props).toContain('attribute');
+  });
+
+  it('should have a title set', () => {
+    const component = selectComponent<HelloApp>(HELLO_APP);
+    const { $title } = component;
+    expect($title.innerText).toEqual('Sample App');
   });
 
 });
